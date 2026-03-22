@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Notification Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">📋</span>
+        <div>
+          <h1>Job Notification Tracker</h1>
+          <p class="tagline">Stay on top of applications &amp; deadlines</p>
+        </div>
+      </div>
+      <div class="stats-bar" id="statsBar" aria-live="polite">
+        <div class="stat">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat stat-applied">
+          <span class="stat-value" id="statApplied">0</span>
+          <span class="stat-label">Applied</span>
+        </div>
+        <div class="stat stat-pending">
+          <span class="stat-value" id="statNotApplied">0</span>
+          <span class="stat-label">Not applied</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Deadline alerts (within 2 days) -->
+  <div class="alert-panel" id="deadlineAlertPanel" role="region" aria-label="Upcoming deadlines" hidden>
+    <div class="alert-panel-header">
+      <strong>⏰ Upcoming deadlines</strong>
+      <span class="alert-sub">Due within 2 days</span>
+    </div>
+    <ul class="alert-list" id="deadlineAlertList"></ul>
+  </div>
+
+  <main class="main-content">
+    <!-- Form card -->
+    <section class="card form-card" aria-labelledby="formTitle">
+      <h2 id="formTitle" class="card-title">Add a job</h2>
+      <form id="jobForm" class="job-form" novalidate>
+        <input type="hidden" id="editId" value="" />
+
+        <div class="form-grid">
+          <label class="field">
+            <span class="field-label">Company name</span>
+            <input type="text" id="company" name="company" placeholder="e.g. Acme Corp" required autocomplete="organization" />
+          </label>
+          <label class="field">
+            <span class="field-label">Job role</span>
+            <input type="text" id="role" name="role" placeholder="e.g. Frontend Developer" required />
+          </label>
+          <label class="field field-span-2">
+            <span class="field-label">Application link</span>
+            <input type="url" id="link" name="link" placeholder="https://..." required />
+          </label>
+          <label class="field">
+            <span class="field-label">Status</span>
+            <select id="status" name="status" required>
+              <option value="applied">Applied</option>
+              <option value="not-applied">Not Applied</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Deadline</span>
+            <input type="date" id="deadline" name="deadline" required />
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <span id="submitBtnText">Add Job</span>
+          </button>
+          <button type="button" class="btn btn-ghost" id="cancelEditBtn" hidden>Cancel edit</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Search & filter -->
+    <section class="card controls-card" aria-label="Search and filters">
+      <div class="controls-row">
+        <label class="field field-grow">
+          <span class="field-label sr-only">Search</span>
+          <input type="search" id="searchInput" placeholder="Search by company or role..." autocomplete="off" />
+        </label>
+        <label class="field field-filter">
+          <span class="field-label">Filter by status</span>
+          <select id="filterStatus">
+            <option value="all">All statuses</option>
+            <option value="applied">Applied</option>
+            <option value="not-applied">Not Applied</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn-danger-outline" id="clearAllBtn" title="Remove all jobs">
+          Clear all
+        </button>
+      </div>
+    </section>
+
+    <!-- Job list -->
+    <section class="jobs-section" aria-labelledby="jobsTitle">
+      <div class="jobs-section-head">
+        <h2 id="jobsTitle" class="section-heading">Your jobs</h2>
+        <p class="jobs-count" id="filteredCount"></p>
+      </div>
+
+      <div class="table-wrap" id="tableWrap">
+        <table class="jobs-table">
+          <thead>
+            <tr>
+              <th scope="col">Company</th>
+              <th scope="col">Role</th>
+              <th scope="col">Link</th>
+              <th scope="col">Status</th>
+              <th scope="col">Deadline</th>
+              <th scope="col" class="th-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="jobsTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="cards-grid" id="cardsGrid" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <p>No jobs match your filters.</p>
+        <p class="empty-hint">Try adjusting search or add a new job above.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Job Notification Tracker — data stored locally in your browser</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
